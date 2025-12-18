@@ -1,51 +1,654 @@
 {
   "procedures": [
     {
-      "id": "rumore_freddo_metallico",
-      "title": "Rumore metallico a freddo (pochi secondi)",
-      "keywords": ["rumore", "freddo", "metallico", "ferraglia", "avviamento"],
+      "id": "avviamento_non_parte",
+      "title": "Motore non parte / difficoltà di avviamento",
+      "keywords": [
+        "non parte", "non si avvia", "fatica a partire", "parte male",
+        "avviamento lento", "click", "tac tac", "motorino avviamento",
+        "parte solo con i cavi", "parte a freddo", "parte a caldo",
+        "chiave non gira", "pulsante start non va", "immobilizer", "immobiliser"
+      ],
       "causes": [
         {
-          "name": "Tendicinghia servizi / cinghia accessori",
+          "name": "Batteria scarica/difettosa o morsetti ossidati",
+          "probability": 0.38,
+          "verify": [
+            { "t": "Tensione batteria", "d": "Misura a riposo e durante avviamento (caduta tensione)." },
+            { "t": "Morsetti/masse", "d": "Controllo ossido, serraggio, cavo massa telaio." }
+          ],
+          "repair": [
+            { "t": "Ricarica/sostituzione batteria", "d": "Batteria con Ah/CCA corretti." },
+            { "t": "Pulizia e serraggio morsetti", "d": "Ripristina contatti e masse." }
+          ]
+        },
+        {
+          "name": "Motorino avviamento o relè avviamento guasto",
+          "probability": 0.27,
+          "verify": [
+            { "t": "Click senza rotazione", "d": "Sintomo tipico relè/solenoide." },
+            { "t": "12V comando motorino", "d": "Verifica alimentazione al solenoide." }
+          ],
+          "repair": [
+            { "t": "Sostituzione relè/motorino", "d": "Sostituire componente difettoso." },
+            { "t": "Test avviamenti", "d": "Ripetuti a caldo/freddo." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "batteria_non_carica",
+      "title": "Batteria non carica / si scarica",
+      "keywords": [
+        "batteria non carica", "batteria si scarica", "spia batteria",
+        "alternatore", "carica bassa", "non tiene la carica",
+        "si scarica da sola", "assorbimento", "dispersione"
+      ],
+      "causes": [
+        {
+          "name": "Alternatore/regolatore difettoso",
+          "probability": 0.45,
+          "verify": [
+            { "t": "Tensione in moto", "d": "Misura carica alternatore (valori coerenti)." },
+            { "t": "Cinghia servizi", "d": "Controllo tensione/strappi/slittamento." }
+          ],
+          "repair": [
+            { "t": "Riparazione/sostituzione alternatore", "d": "Sostituire alternatore o regolatore." },
+            { "t": "Test ricarica", "d": "Verifica stabilità carica e spie." }
+          ]
+        },
+        {
+          "name": "Assorbimento anomalo a veicolo spento",
           "probability": 0.35,
           "verify": [
-            {"t":"Ispezione visiva cinghia", "d":"Crepe, sfilacciamenti, lucidatura anomala."},
-            {"t":"Ascolto zona servizi", "d":"Rumore localizzato lato cinghia servizi."},
-            {"t":"Test spray (con criterio)", "d":"Se varia, indica possibile slittamento/attrito."}
+            { "t": "Test assorbimento", "d": "Misura A a veicolo spento e ricerca circuito." },
+            { "t": "Verifica accessori", "d": "Autoradio, antifurto, luci, centraline non in sleep." }
           ],
           "repair": [
-            {"t":"Sostituzione tendicinghia", "d":"Sostituire tenditore e verificare pulegge."},
-            {"t":"Sostituzione cinghia servizi", "d":"Montare cinghia corretta e verificare allineamento."},
-            {"t":"Test finale a freddo", "d":"Avvio a freddo e verifica assenza rumore."}
+            { "t": "Isolamento circuito", "d": "Individua utenza e ripristina." },
+            { "t": "Test finale", "d": "Assorbimento rientra nei valori normali." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "spia_motore",
+      "title": "Spia motore accesa / avaria motore",
+      "keywords": [
+        "spia motore", "check engine", "avaria motore", "spia gialla",
+        "spia lampeggia", "errore centralina", "codice errore", "obd"
+      ],
+      "causes": [
+        {
+          "name": "DTC in centralina (sensore/attuatori/combustione)",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Diagnosi OBD", "d": "Leggi DTC, freeze frame, parametri live." },
+            { "t": "Controllo base", "d": "Carburante, aria, perdite, connettori." }
+          ],
+          "repair": [
+            { "t": "Intervento mirato", "d": "Ripara causa reale secondo DTC e test." },
+            { "t": "Reset + prova strada", "d": "Cancellazione errori e verifica ritorno." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "perdita_liquidi",
+      "title": "Perdita liquidi (olio, refrigerante, gasolio)",
+      "keywords": [
+        "perdita olio", "perde olio", "perdita acqua", "perde acqua",
+        "perdita refrigerante", "gocciola", "macchia a terra",
+        "perdita gasolio", "odore gasolio", "perdita carburante"
+      ],
+      "causes": [
+        {
+          "name": "Guarnizioni/tubi/fascette degradati",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Ispezione visiva", "d": "Localizza origine, tracce, pulisci e ricontrolla." },
+            { "t": "Prova pressione (raffreddamento)", "d": "Test impianto per microperdite." }
+          ],
+          "repair": [
+            { "t": "Sostituzione componente", "d": "Tubo/guarnizione/fascetta corretta." },
+            { "t": "Ripristino livelli", "d": "Riempimento e spurgo se necessario." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "surriscaldamento",
+      "title": "Temperatura alta / surriscaldamento",
+      "keywords": [
+        "temperatura alta", "si scalda", "va in ebollizione",
+        "perde acqua e si scalda", "ventola radiatore", "radiatore",
+        "termostato", "pompa acqua"
+      ],
+      "causes": [
+        {
+          "name": "Termostato/pompa acqua/aria nel circuito",
+          "probability": 0.5,
+          "verify": [
+            { "t": "Controllo livello e perdite", "d": "Verifica livello e presenza perdite." },
+            { "t": "Spurgo e circolazione", "d": "Verifica circolo e aria nel circuito." }
+          ],
+          "repair": [
+            { "t": "Ripristino circuito", "d": "Spurgo corretto e sostituzione componenti guasti." },
+            { "t": "Test temperatura", "d": "Prova su strada e verifica intervento ventole." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "rumore_motore_freddo",
+      "title": "Rumore metallico a freddo / ticchettio",
+      "keywords": [
+        "rumore metallico", "ticchettio", "battito", "ferraglia",
+        "a freddo", "rumore per pochi secondi", "catena", "tendicinghia"
+      ],
+      "causes": [
+        {
+          "name": "Tendicinghia servizi / pulegge",
+          "probability": 0.35,
+          "verify": [
+            { "t": "Ispezione cinghia", "d": "Crepe, sfilacciamenti, rumorosità pulegge." },
+            { "t": "Ascolto lato servizi", "d": "Localizza rumore lato cinghia." }
+          ],
+          "repair": [
+            { "t": "Sostituzione tendicinghia/cinghia", "d": "Sostituire componenti usurati." },
+            { "t": "Test avvio a freddo", "d": "Conferma assenza rumore." }
           ]
         },
         {
-          "name": "Distribuzione (catena/tendicatena) – se presente sul motore",
+          "name": "Distribuzione (catena/tendicatena) – se presente",
           "probability": 0.25,
           "verify": [
-            {"t":"Diagnosi rumore lato distribuzione", "d":"Rumore più “secco”, lato catena."},
-            {"t":"Verifica parametri/codici", "d":"Eventuali errori fase/correlazione (se presenti)."},
-            {"t":"Controllo storico manutenzione", "d":"Olio, intervalli, qualità lubrificante."}
+            { "t": "Diagnosi rumorosità", "d": "Rumore più secco lato distribuzione." },
+            { "t": "Controllo manutenzione olio", "d": "Intervalli/qualità olio." }
           ],
           "repair": [
-            {"t":"Ispezione componente", "d":"Valutare gioco/tenditore secondo procedura."},
-            {"t":"Ripristino", "d":"Intervento secondo specifiche del motore."},
-            {"t":"Test finale", "d":"Avvio e prova strada."}
+            { "t": "Intervento distribuzione", "d": "Secondo procedura motore specifica." },
+            { "t": "Test finale", "d": "Avvio + prova strada." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "vibrazioni_in_marcia",
+      "title": "Vibrazioni in marcia / volante vibra",
+      "keywords": [
+        "vibra", "vibrazioni", "volante vibra", "vibra a 90", "vibra a 110",
+        "trema", "tira a destra", "tira a sinistra", "convergenza", "equilibratura"
+      ],
+      "causes": [
+        {
+          "name": "Gomme/equilibratura/convergenza",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Controllo gomme", "d": "Usura irregolare, ovalizzazione, pressione." },
+            { "t": "Controllo cerchi", "d": "Cerchio storto/colpo." }
+          ],
+          "repair": [
+            { "t": "Equilibratura e convergenza", "d": "Eseguire regolazioni e test." },
+            { "t": "Eventuale sostituzione gomme", "d": "Se difetto strutturale." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "freni_rumore_vibrazione",
+      "title": "Freni: rumore, vibrazione o frenata debole",
+      "keywords": [
+        "freni", "frena male", "pedale morbido", "pedale duro",
+        "vibra in frenata", "fischio freni", "stridio", "abs", "spia abs"
+      ],
+      "causes": [
+        {
+          "name": "Pastiglie/dischi usurati o ovalizzati",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Controllo spessore", "d": "Valuta dischi/pastiglie e rigature." },
+            { "t": "Controllo pinze", "d": "Scorrimento e bloccaggi." }
+          ],
+          "repair": [
+            { "t": "Sostituzione dischi/pastiglie", "d": "Componenti nuovi e pulizia sedi." },
+            { "t": "Test frenata", "d": "Prova su strada e verifica vibrazioni." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "frizione_cambio",
+      "title": "Frizione/cambio: slitta, dura, marce che grattano",
+      "keywords": [
+        "frizione", "frizione slitta", "frizione dura", "frizione alta",
+        "cambio duro", "marce dure", "non entra la marcia", "gratta",
+        "volano", "bimassa"
+      ],
+      "causes": [
+        {
+          "name": "Usura frizione/volano o comando idraulico",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Prova su strada", "d": "Slittamento in accelerazione, odore frizione." },
+            { "t": "Controllo comando", "d": "Cilindretto, perdite, corsa pedale." }
+          ],
+          "repair": [
+            { "t": "Sostituzione kit frizione", "d": "Kit + eventuale volano se necessario." },
+            { "t": "Spurgo comando", "d": "Se idraulico, spurgo corretto." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "luci_frecce_stop",
+      "title": "Luci/frecce/stop non funzionano",
+      "keywords": [
+        "luci non vanno", "faro spento", "anabbaglianti", "abbaglianti",
+        "stop non va", "freccia non va", "freccia veloce", "luci targa",
+        "lampadina", "fusibile luci", "massa fanale", "portalampada"
+      ],
+      "causes": [
+        {
+          "name": "Lampadina/LED, fusibile o massa difettosi",
+          "probability": 0.65,
+          "verify": [
+            { "t": "Controllo lampada e fusibile", "d": "Verifica continuità e amperaggio." },
+            { "t": "Controllo massa e ossido", "d": "Portalampada e connettori." }
+          ],
+          "repair": [
+            { "t": "Sostituzione lampadina/fusibile", "d": "Ricambio corretto e test." },
+            { "t": "Ripristino massa", "d": "Pulizia contatti e serraggi." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "alzacristalli_chiusura",
+      "title": "Alzacristalli / chiusura centralizzata non funzionano",
+      "keywords": [
+        "vetro non sale", "vetro non scende", "alzacristalli", "pulsante vetro",
+        "chiusura centralizzata", "non chiude", "non apre", "telecomando non va",
+        "serratura", "attuatore", "comfort", "body computer"
+      ],
+      "causes": [
+        {
+          "name": "Fusibile/relè, interruttore o motorino guasto",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Controllo fusibili comfort", "d": "Scatola fusibili corretta." },
+            { "t": "Test alimentazione al motorino", "d": "12V e massa presenti?" }
+          ],
+          "repair": [
+            { "t": "Sostituzione componente", "d": "Interruttore/motorino/attuatore se difettosi." },
+            { "t": "Test finale", "d": "Funzionamento ripetuto e verifica assorbimenti." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "ventola_abitacolo",
+      "title": "Ventola abitacolo / clima: non soffia o va solo a una velocità",
+      "keywords": [
+        "ventola non va", "non esce aria", "clima non soffia", "riscaldamento non va",
+        "ventola solo alla massima", "ventola intermittente", "blower", "aria debole",
+        "resistenza ventola", "regolatore ventola"
+      ],
+      "causes": [
+        {
+          "name": "Resistenza ventola / regolatore guasto",
+          "probability": 0.45,
+          "verify": [
+            { "t": "Sintomo velocità", "d": "Funziona solo su 4/4 o non regola." },
+            { "t": "Controllo connettore", "d": "Surriscaldamento/annerimento contatti." }
+          ],
+          "repair": [
+            { "t": "Sostituzione resistenza/regolatore", "d": "Ricambio compatibile + controllo connettore." },
+            { "t": "Test velocità", "d": "Verifica tutte le velocità." }
           ]
         },
         {
-          "name": "Supporti motore (vibrazioni/colpi)",
-          "probability": 0.20,
+          "name": "Motore ventola abitacolo guasto/bloccato",
+          "probability": 0.3,
           "verify": [
-            {"t":"Controllo supporti", "d":"Crepe, cedimenti, trasudamenti (se idraulici)."},
-            {"t":"Prova carico motore", "d":"Leggero carico e osservazione movimento anomalo."}
+            { "t": "Alimentazione diretta", "d": "Prova motore con 12V (con protezione)." },
+            { "t": "Filtro abitacolo", "d": "Filtro intasato aumenta carico." }
           ],
           "repair": [
-            {"t":"Sostituzione supporti", "d":"Sostituire lato difettoso o coppia se necessario."},
-            {"t":"Allineamento e test", "d":"Verifica vibrazioni in marcia e al minimo."}
+            { "t": "Sostituzione motore ventola", "d": "Sostituire gruppo ventola." },
+            { "t": "Sostituzione filtro abitacolo", "d": "Ripristina flusso aria." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "ac_non_fredda",
+      "title": "Climatizzatore non raffredda / aria tiepida",
+      "keywords": [
+        "clima non fredda", "aria tiepida", "aria calda con clima", "ac non va",
+        "compressore clima", "gas clima", "ricarica clima", "perdita clima",
+        "odore clima", "rumore compressore"
+      ],
+      "causes": [
+        {
+          "name": "Gas refrigerante basso o perdita impianto",
+          "probability": 0.5,
+          "verify": [
+            { "t": "Pressioni impianto", "d": "Controllo pressioni alta/bassa." },
+            { "t": "Ricerca perdite", "d": "UV/sniffer e controllo o-ring." }
+          ],
+          "repair": [
+            { "t": "Riparazione perdita", "d": "Sostituire o-ring/tubi/condensatore se necessario." },
+            { "t": "Vuoto e ricarica", "d": "Procedura corretta con quantità specifica." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "dpf_fap",
+      "title": "Diesel: DPF/FAP intasato / rigenerazione",
+      "keywords": [
+        "dpf", "fap", "filtro antiparticolato", "intasato", "rigenerazione",
+        "spia dpf", "spia filtro", "potenza ridotta", "va in recovery",
+        "fumo", "odore", "consumi alti"
+      ],
+      "causes": [
+        {
+          "name": "Intasamento DPF per uso urbano o guasti correlati",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Diagnosi valori DPF", "d": "Differenziale pressione, carico fuliggine." },
+            { "t": "Verifica cause a monte", "d": "EGR, iniettori, termostato, sensori." }
+          ],
+          "repair": [
+            { "t": "Rigenerazione assistita", "d": "Se permesso e in sicurezza." },
+            { "t": "Pulizia/sostituzione", "d": "Pulizia professionale o sostituzione se necessario." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "egr",
+      "title": "Diesel: EGR sporca/bloccata (strappi, fumo, spia)",
+      "keywords": [
+        "egr", "valvola egr", "strappa", "va a singhiozzo", "fumo nero",
+        "perde potenza", "spia motore", "irregolare", "minimo instabile"
+      ],
+      "causes": [
+        {
+          "name": "EGR sporca o bloccata",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Diagnosi comandi EGR", "d": "Test attuatore e posizione." },
+            { "t": "Ispezione", "d": "Depositi e incrostazioni." }
+          ],
+          "repair": [
+            { "t": "Pulizia/sostituzione EGR", "d": "Intervento secondo accessibilità e guarnizioni." },
+            { "t": "Test finale", "d": "Reset adattamenti se necessari e prova strada." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "adblue_scr",
+      "title": "Diesel Euro 6: AdBlue/SCR (avaria, countdown, no start)",
+      "keywords": [
+        "adblue", "scr", "urea", "avaria adblue", "spia adblue",
+        "countdown", "tra 1000 km non parte", "no start tra km",
+        "pompa adblue", "iniettore adblue", "cristalli adblue"
+      ],
+      "causes": [
+        {
+          "name": "Guasto sistema SCR (pompa/iniettore/sensori)",
+          "probability": 0.65,
+          "verify": [
+            { "t": "Diagnosi DTC SCR", "d": "Leggi errori e parametri (pressione/qualità)." },
+            { "t": "Controllo cristallizzazioni", "d": "Verifica tubi e iniettore." }
+          ],
+          "repair": [
+            { "t": "Ripristino componenti", "d": "Sostituzione componenti difettosi e lavaggio circuito se previsto." },
+            { "t": "Reset e prova", "d": "Reset errori e test su strada." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "turbo_potenza",
+      "title": "Perdita potenza / turbo / recovery",
+      "keywords": [
+        "perde potenza", "non tira", "va piano", "recovery", "limp mode",
+        "turbo", "sovralimentazione", "p0299", "pressione turbo bassa",
+        "fischio turbo", "intercooler", "tubi turbo"
+      ],
+      "causes": [
+        {
+          "name": "Perdita pressione (tubi/intercooler) o attuatore turbo",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Controllo tubazioni", "d": "Crepe, manicotti, fascette, intercooler." },
+            { "t": "Diagnosi pressione turbo", "d": "Confronto richiesta vs reale." }
+          ],
+          "repair": [
+            { "t": "Ripristino tenute", "d": "Sostituzione tubi/manicotti/fascette." },
+            { "t": "Intervento attuatore/turbo", "d": "Secondo esito test." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "iniettori_mancate_accensioni",
+      "title": "Motore irregolare / strappi / mancata accensione",
+      "keywords": [
+        "strappa", "va a singhiozzo", "irregolare", "va a tre cilindri",
+        "mancate accensioni", "misfire", "bobina", "candele",
+        "iniettori", "minimo instabile"
+      ],
+      "causes": [
+        {
+          "name": "Accensione (candele/bobine) o iniezione (iniettori)",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Diagnosi misfire", "d": "Codici e contatori misfire." },
+            { "t": "Controllo candele/bobine", "d": "Usura e scambio per prova." }
+          ],
+          "repair": [
+            { "t": "Sostituzione componenti", "d": "Candele/bobine/iniettori secondo diagnosi." },
+            { "t": "Test finale", "d": "Minimo regolare e prova strada." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "rumore_sospensioni",
+      "title": "Rumori sospensioni (buche, toc toc, scricchiolii)",
+      "keywords": [
+        "rumore buche", "toc toc", "colpi sospensioni", "scricchiolio",
+        "bielletta", "braccio", "testina", "silentblock", "ammortizzatore"
+      ],
+      "causes": [
+        {
+          "name": "Biellette, bracci, testine o ammortizzatori usurati",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Controllo gioco", "d": "Leveraggi e snodi, verifica giochi anomali." },
+            { "t": "Controllo perdite ammortizzatore", "d": "Tracce olio e decadimento." }
+          ],
+          "repair": [
+            { "t": "Sostituzione componenti usurati", "d": "Sostituisci elementi difettosi e fai assetto se necessario." },
+            { "t": "Test su strada", "d": "Verifica assenza rumori." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "servosterzo",
+      "title": "Sterzo duro / servosterzo non funziona",
+      "keywords": [
+        "sterzo duro", "servosterzo", "spia sterzo", "volante duro",
+        "pompa idroguida", "olio servosterzo", "eps", "elettrico sterzo"
+      ],
+      "causes": [
+        {
+          "name": "Livello olio basso (idroguida) o guasto EPS",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Controllo livello/perdite", "d": "Verifica livello olio e perdite tubi." },
+            { "t": "Diagnosi EPS", "d": "Leggi errori se servosterzo elettrico." }
+          ],
+          "repair": [
+            { "t": "Ripristino circuito", "d": "Rabbocco + eliminazione perdite/spurgo." },
+            { "t": "Riparazione EPS", "d": "Intervento su sensori/centralina secondo DTC." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "scappamento_odore_rumore",
+      "title": "Scarico rumoroso / odore gas di scarico",
+      "keywords": [
+        "scarico rumoroso", "marmitta", "rumore scarico",
+        "odore gas di scarico", "odore in abitacolo",
+        "flessibile scarico", "perdita scarico"
+      ],
+      "causes": [
+        {
+          "name": "Perdita impianto scarico (giunti, flessibile, silenziatore)",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Ispezione scarico", "d": "Giunti, crepe, staffe, flessibile." },
+            { "t": "Controllo odore", "d": "Verifica ingresso fumi in abitacolo." }
+          ],
+          "repair": [
+            { "t": "Riparazione/sostituzione componente", "d": "Sostituire sezione difettosa." },
+            { "t": "Test finale", "d": "Assenza rumori e odori." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "furgoni_porta_scorr",
+      "title": "Furgoni: porta scorrevole/chiusura problemi",
+      "keywords": [
+        "porta scorrevole", "non chiude porta", "porta laterale",
+        "serratura porta", "cavo porta", "finecorsa porta", "centralizzata porta"
+      ],
+      "causes": [
+        {
+          "name": "Regolazione/guide usurate o serratura/attuatore difettosi",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Controllo guide", "d": "Giochi, rulli, sporco, deformazioni." },
+            { "t": "Test serratura", "d": "Attuatore e microinterruttori." }
+          ],
+          "repair": [
+            { "t": "Ripristino guide", "d": "Pulizia/lubrificazione o sostituzione rulli." },
+            { "t": "Sostituzione attuatore/serratura", "d": "Se difettosi." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "furgoni_freni_carico",
+      "title": "Furgoni: frenata sotto carico / surriscaldamento freni",
+      "keywords": [
+        "frena male con carico", "freni caldi", "odore freni",
+        "pedale lungo", "fading", "frenata lunga", "furgone carico"
+      ],
+      "causes": [
+        {
+          "name": "Impianto freni stressato (pastiglie/dischi/olio freni)",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Controllo spessore e stato", "d": "Dischi/pastiglie e crepe/rigature." },
+            { "t": "Controllo liquido freni", "d": "Liquido vecchio assorbe umidità." }
+          ],
+          "repair": [
+            { "t": "Sostituzione componenti", "d": "Pastiglie/dischi e spurgo se necessario." },
+            { "t": "Test in sicurezza", "d": "Verifica frenata progressiva." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "agricolo_idraulica",
+      "title": "Mezzo agricolo: impianto idraulico lento / sollevatore non alza",
+      "keywords": [
+        "trattore", "agricolo", "sollevatore non alza", "non alza", "non scende",
+        "idraulica lenta", "pompa idraulica", "olio idraulico", "presa idraulica",
+        "distributore", "cilindro idraulico"
+      ],
+      "causes": [
+        {
+          "name": "Olio idraulico basso/vecchio o filtro intasato",
+          "probability": 0.6,
+          "verify": [
+            { "t": "Controllo livello olio idraulico", "d": "Verifica livello e stato (schiuma/colore)." },
+            { "t": "Controllo filtro", "d": "Filtro intasato causa lentezza e cavitazione." }
+          ],
+          "repair": [
+            { "t": "Cambio olio e filtro", "d": "Sostituire olio idraulico e filtro corretti." },
+            { "t": "Test sollevatore", "d": "Verifica alzata e tenuta sotto carico." }
+          ]
+        },
+        {
+          "name": "Pompa idraulica o distributore usurati",
+          "probability": 0.3,
+          "verify": [
+            { "t": "Misura pressione (se possibile)", "d": "Controllo pressione circuito." },
+            { "t": "Prova con utenza", "d": "Verifica cali sotto carico." }
+          ],
+          "repair": [
+            { "t": "Riparazione pompa/distributore", "d": "Intervento secondo manuale mezzo." },
+            { "t": "Test finale", "d": "Controllo perdite e prestazioni." }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "agricolo_pto",
+      "title": "Mezzo agricolo: presa di forza (PTO) non innesta / slitta",
+      "keywords": [
+        "presa di forza", "pto", "non innesta", "slitta", "frizione pto",
+        "cardano", "innesto pto", "trattore pto", "presa forza"
+      ],
+      "causes": [
+        {
+          "name": "Comando innesto o frizione PTO regolazione/usura",
+          "probability": 0.55,
+          "verify": [
+            { "t": "Verifica comando", "d": "Cavo/leve/sensori (se elettronico) e regolazioni." },
+            { "t": "Controllo slittamento", "d": "Sotto carico: giri aumentano ma attrezzo non lavora." }
+          ],
+          "repair": [
+            { "t": "Regolazione o sostituzione componenti", "d": "Intervento su frizione PTO/comando." },
+            { "t": "Test con attrezzo", "d": "Prova in sicurezza con carico reale." }
           ]
         }
       ]
     }
   ]
-}
+        }
