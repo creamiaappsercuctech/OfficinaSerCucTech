@@ -1,0 +1,51 @@
+{
+  "procedures": [
+    {
+      "id": "rumore_freddo_metallico",
+      "title": "Rumore metallico a freddo (pochi secondi)",
+      "keywords": ["rumore", "freddo", "metallico", "ferraglia", "avviamento"],
+      "causes": [
+        {
+          "name": "Tendicinghia servizi / cinghia accessori",
+          "probability": 0.35,
+          "verify": [
+            {"t":"Ispezione visiva cinghia", "d":"Crepe, sfilacciamenti, lucidatura anomala."},
+            {"t":"Ascolto zona servizi", "d":"Rumore localizzato lato cinghia servizi."},
+            {"t":"Test spray (con criterio)", "d":"Se varia, indica possibile slittamento/attrito."}
+          ],
+          "repair": [
+            {"t":"Sostituzione tendicinghia", "d":"Sostituire tenditore e verificare pulegge."},
+            {"t":"Sostituzione cinghia servizi", "d":"Montare cinghia corretta e verificare allineamento."},
+            {"t":"Test finale a freddo", "d":"Avvio a freddo e verifica assenza rumore."}
+          ]
+        },
+        {
+          "name": "Distribuzione (catena/tendicatena) – se presente sul motore",
+          "probability": 0.25,
+          "verify": [
+            {"t":"Diagnosi rumore lato distribuzione", "d":"Rumore più “secco”, lato catena."},
+            {"t":"Verifica parametri/codici", "d":"Eventuali errori fase/correlazione (se presenti)."},
+            {"t":"Controllo storico manutenzione", "d":"Olio, intervalli, qualità lubrificante."}
+          ],
+          "repair": [
+            {"t":"Ispezione componente", "d":"Valutare gioco/tenditore secondo procedura."},
+            {"t":"Ripristino", "d":"Intervento secondo specifiche del motore."},
+            {"t":"Test finale", "d":"Avvio e prova strada."}
+          ]
+        },
+        {
+          "name": "Supporti motore (vibrazioni/colpi)",
+          "probability": 0.20,
+          "verify": [
+            {"t":"Controllo supporti", "d":"Crepe, cedimenti, trasudamenti (se idraulici)."},
+            {"t":"Prova carico motore", "d":"Leggero carico e osservazione movimento anomalo."}
+          ],
+          "repair": [
+            {"t":"Sostituzione supporti", "d":"Sostituire lato difettoso o coppia se necessario."},
+            {"t":"Allineamento e test", "d":"Verifica vibrazioni in marcia e al minimo."}
+          ]
+        }
+      ]
+    }
+  ]
+}
