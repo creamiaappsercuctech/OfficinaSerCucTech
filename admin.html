@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OfficinaPlus Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">OP</div>
+      <div>
+        <div class="title">Admin OfficinaPlus</div>
+        <div class="subtitle">Gestione procedure (localStorage)</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <a class="btn ghost" href="index.html">← App</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Procedure (JSON)</h2>
+      <p class="muted">
+        Qui puoi modificare/aggiungere procedure. Verranno salvate in <b>localStorage</b> sul dispositivo.
+        Se vuoi che valgano per tutti, modifica anche <code>data/procedures.json</code> su GitHub.
+      </p>
+
+      <label>Editor JSON</label>
+      <textarea id="jsonEditor" rows="18"></textarea>
+
+      <div class="row">
+        <button class="btn" id="btnLoadDefault">Carica default</button>
+        <button class="btn" id="btnLoadLocal">Carica local</button>
+        <button class="btn ghost" id="btnSaveLocal">Salva local</button>
+        <button class="btn ghost" id="btnClearLocal">Reset (cancella local)</button>
+      </div>
+
+      <div class="hint">
+        Consiglio: prima “Carica default”, poi fai modifiche, poi “Salva local”. Testa nell’app.
+      </div>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>
