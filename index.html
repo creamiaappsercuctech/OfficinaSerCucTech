@@ -1,138 +1,129 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#111827" />
-  <title>OfficinaPlus PWA</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<title>OfficinaSerCucTech – Percorso Riparazione</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f5f5f5;
+  margin:0;
+  padding:15px;
+}
+h1,h2 { color:#1f2a44; }
+textarea, button, select {
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  font-size:16px;
+}
+.box {
+  background:#fff;
+  padding:15px;
+  margin-top:15px;
+  border-radius:8px;
+}
+.step {
+  margin-bottom:10px;
+}
+.controls button {
+  width:32%;
+  margin-right:2%;
+}
+.controls button:last-child { margin-right:0; }
+</style>
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo">OP</div>
-      <div>
-        <div class="title">OfficinaPlus</div>
-        <div class="subtitle">Causa → Verifica → Riparazione • Audio • Report</div>
-      </div>
-    </div>
-    <div class="top-actions">
-      <a class="btn ghost" href="admin.html">Admin</a>
-      <button class="btn ghost" id="btnInstall" hidden>Installa</button>
-    </div>
-  </header>
 
-  <main class="container">
-    <section class="card">
-      <h2>Accettazione cliente</h2>
+<h1>🔧 OfficinaSerCucTech</h1>
 
-      <div class="grid2">
-        <div>
-          <label>Cliente</label>
-          <input id="clientName" placeholder="Es. Mario Rossi" autocomplete="name" />
-        </div>
-        <div>
-          <label>Veicolo (targa/VIN/modello)</label>
-          <input id="vehicleId" placeholder="Es. AB123CD / WDB..." />
-        </div>
-      </div>
+<div class="box">
+  <label><b>Cosa dice il cliente:</b></label>
+  <textarea id="clientSays" placeholder="Es: non va la ventola del riscaldamento"></textarea>
+  <button onclick="analyze()">🔍 Analizza problema</button>
+</div>
 
-      <label>Cosa dice il cliente (parole sue)</label>
-      <textarea id="clientSays" rows="3" placeholder="Es. A freddo fa un rumore metallico per 2-3 secondi..."></textarea>
+<div class="box" id="repairBox" style="display:none;">
+  <h2>🛠 Percorso di Riparazione</h2>
+  <div id="repairSteps"></div>
 
-      <div class="row">
-        <button class="btn" id="btnAnalyze">Analizza e proponi cause</button>
-        <button class="btn ghost" id="btnClear">Nuova scheda</button>
-      </div>
+  <div class="controls">
+    <button onclick="playVoice()">▶️ Play</button>
+    <button onclick="pauseVoice()">⏸ Pausa</button>
+    <button onclick="resumeVoice()">⏯ Riprendi</button>
+  </div>
+</div>
 
-      <div class="hint">
-        Suggerimento: inserisci qui anche “quando succede” (freddo/caldo), “dove” (anteriore/posteriore), “in accelerazione/frenata”, ecc.
-      </div>
-    </section>
+<script>
+let procedures = [];
+let utterance = null;
+let fullText = "";
 
-    <section class="card">
-      <div class="row space">
-        <h2>Percorso riparazione</h2>
-        <div class="row">
-          <input id="searchAll" class="search" placeholder="Cerca: rumore, P0299, tendicatena, vibrazione..." />
-          <button class="btn ghost" id="btnStopAudio">Stop audio</button>
-        </div>
-      </div>
+// Carica procedures.json
+fetch("data/procedures.json")
+  .then(r => r.json())
+  .then(j => procedures = j.procedures);
 
-      <div class="tabs">
-        <button class="tab active" data-tab="cause">1) Causa</button>
-        <button class="tab" data-tab="verify">2) Verifica</button>
-        <button class="tab" data-tab="repair">3) Riparazione</button>
-        <button class="tab" data-tab="report">Report</button>
-      </div>
+function analyze() {
+  const text = document.getElementById("clientSays").value.toLowerCase();
+  if (!text) return alert("Inserisci il problema del cliente");
 
-      <div id="tab-cause" class="tabpane active">
-        <h3>Cause proposte</h3>
-        <div id="causeList" class="list"></div>
-        <div class="row">
-          <button class="btn" id="btnToVerify" disabled>Vai a Verifica</button>
-        </div>
-      </div>
+  let found = null;
 
-      <div id="tab-verify" class="tabpane">
-        <h3>Verifica (checklist)</h3>
-        <div id="verifyChecklist" class="checklist"></div>
-        <div class="row">
-          <button class="btn ghost" id="btnBackToCause">← Indietro</button>
-          <button class="btn" id="btnToRepair" disabled>Vai a Riparazione</button>
-        </div>
-      </div>
+  procedures.forEach(p => {
+    p.keywords.forEach(k => {
+      if (text.includes(k)) found = p;
+    });
+  });
 
-      <div id="tab-repair" class="tabpane">
-        <h3>Riparazione (step)</h3>
-        <div id="repairSteps" class="steps"></div>
+  if (!found) return alert("Nessuna procedura trovata");
 
-        <div class="row">
-          <button class="btn ghost" id="btnBackToVerify">← Indietro</button>
-          <button class="btn" id="btnToReport">Vai a Report</button>
-        </div>
-      </div>
+  showRepair(found);
+}
 
-      <div id="tab-report" class="tabpane">
-        <h3>Report finale (condivisione / stampa)</h3>
+function showRepair(proc) {
+  document.getElementById("repairBox").style.display = "block";
+  const container = document.getElementById("repairSteps");
+  container.innerHTML = "";
 
-        <label>Diagnosi / causa confermata</label>
-        <input id="confirmedCause" placeholder="Es. Tendicinghia servizi usurato" />
+  fullText = "Procedura di riparazione. ";
 
-        <label>Azioni eseguite (note officina)</label>
-        <textarea id="actionsDone" rows="3" placeholder="Es. sostituito tendicinghia, controllo cinghia, prova a freddo OK"></textarea>
+  proc.causes.forEach(c => {
+    container.innerHTML += `<h3>🔹 ${c.name}</h3>`;
+    fullText += `Causa probabile: ${c.name}. `;
 
-        <label>Ricambi utilizzati</label>
-        <textarea id="partsUsed" rows="2" placeholder="Es. Tendicinghia OEM, cinghia servizi"></textarea>
+    c.repair.forEach((r, i) => {
+      container.innerHTML += `
+        <div class="step">
+          <b>Step ${i+1}:</b> ${r.t}<br>
+          <small>${r.d}</small>
+        </div>`;
+      fullText += `Passaggio ${i+1}. ${r.t}. ${r.d}. `;
+    });
+  });
+}
 
-        <label>Esito test finale</label>
-        <input id="finalTest" placeholder="Es. Avviamento a freddo OK, rumore assente, prova strada OK" />
+// VOCALE
+function playVoice() {
+  if (!fullText) return;
+  speechSynthesis.cancel();
+  utterance = new SpeechSynthesisUtterance(fullText);
+  utterance.lang = "it-IT";
+  utterance.rate = 0.95;
+  speechSynthesis.speak(utterance);
+}
 
-        <div class="row">
-          <button class="btn" id="btnBuildReport">Genera report</button>
-          <button class="btn ghost" id="btnShare">Condividi</button>
-          <button class="btn ghost" id="btnPrint">Stampa / Salva PDF</button>
-        </div>
+function pauseVoice() {
+  speechSynthesis.pause();
+}
 
-        <pre id="reportOut" class="report"></pre>
-      </div>
-    </section>
+function resumeVoice() {
+  speechSynthesis.resume();
+}
+</script>
 
-    <section class="card">
-      <h2>Offline & Installazione</h2>
-      <ul class="bullets">
-        <li>Questa PWA funziona offline dopo il primo caricamento.</li>
-        <li>Su Android: menu ⋮ del browser → “Aggiungi a schermata Home” oppure usa “Installa”.</li>
-      </ul>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <span>OfficinaPlus • PWA</span>
-    <span class="muted">v1.0</span>
-  </footer>
-
-  <script src="app.js"></script>
 </body>
 </html>
