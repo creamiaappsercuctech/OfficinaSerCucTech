@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Cache SerCucTech</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:#0b1220;color:#eaf0ff;margin:0;padding:20px}
+    .card{max-width:700px;margin:0 auto;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px}
+    button{padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(56,210,122,.18);color:#fff;font-weight:900}
+    pre{white-space:pre-wrap;background:rgba(0,0,0,.25);padding:12px;border-radius:12px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🧹 Reset cache / Service Worker</h1>
+    <p>Questa pagina prova a:</p>
+    <ul>
+      <li>Disattivare e rimuovere i Service Worker</li>
+      <li>Cancellare tutte le Cache API</li>
+    </ul>
+
+    <button id="go">Esegui reset</button>
+    <p><b>Log:</b></p>
+    <pre id="log">Pronto.</pre>
+
+    <p>Dopo il reset, apri la vetrina:</p>
+    <pre id="link"></pre>
+  </div>
+
+<script>
+(async () => {
+  const log = (t) => { document.getElementById("log").textContent += "\n" + t; };
+  const target = `vetrina.html?id=renzo11&v=${Date.now()}`;
+  document.getElementById("link").textContent = location.origin + location.pathname.replace(/reset\.html.*/,"") + target;
+
+  document.getElementById("go").addEventListener("click", async () => {
+    try{
+      log("1) Cerco Service Worker…");
+      if ("serviceWorker" in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        log("   Registrazioni trovate: " + regs.length);
+        for (const r of regs) {
+          await r.unregister();
+        }
+        log("   Unregister completato.");
+      } else {
+        log("   Service Worker NON supportato (strano su Chrome).");
+      }
+
+      log("2) Cancello Cache API…");
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        log("   Cache trovate: " + keys.length);
+        await Promise.all(keys.map(k => caches.delete(k)));
+        log("   Cache cancellate.");
+      } else {
+        log("   Cache API non disponibile.");
+      }
+
+      log("✅ Reset finito. Ora apro la vetrina nuova…");
+      setTimeout(() => location.href = target, 600);
+
+    }catch(e){
+      log("❌ Errore: " + (e && e.message ? e.message : e));
+    }
+  });
+})();
+</script>
+</body>
+</html>
